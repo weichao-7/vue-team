@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <title></title>
-    <!-- <script src="https://unpkg.com/vue@next"></script> -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   </head>
   <body style="background: #F5F5F5;">
     <div id="app" v-cloak>
-      <el-container style="margin: auto;">
+      <el-container>
         <el-aside width="isPhone?'200px':''" class="aside" :class="show?'show-class':''" v-if="!isPhone || show">
           <div v-for="(item,index) in list" :key="item.id" class="nav">导航栏{{index+1}}</div>
         </el-aside>
@@ -24,38 +23,6 @@
           </div>
         </el-aside>
       </el-container>
-      <!--        <div  ref="rightsH" class="right" >
-          <div v-for="item in list" :key="item.id" id="rightsH">{{item.name}}</div>
-        </div> -->
-      <!--      <div ref="right" style="width: 100px;height: 100px;">dasdas</div> -->
-      <!--      <div class="car">
-        <div class="shop_car">购物车</div>
-        <div class="car-list" >
-          <div class="flex car-list-box" v-for="item in carList" v:key="item.id">
-            <div class="item_content ellipsis">{{item.name}}</div>
-            <div class="flex item_add_l">
-              <div class="item_price">{{item.price/100}}*{{item.count}}</div>
-              <div class="add_car"  @click="del(item,index)">删除</div>
-            </div>
-          </div>
-          <div class="buy" @click="buy()" v-if="carList &&carList.length>0">购买</div>
-        </div>
-      </div>
-			<div class="title">购物天堂</div>
-      <div class="shop_list flex">
-        <div class="shop_list_item " v-for="item in productList" v:key="item.id">
-          <div class="item_pic">
-            <img :src="item.pic"  class="item_box_pic"/>
-          </div>
-          <div class="item_pic_content flex">
-            <div class="item_content ellipsis">{{item.name}}</div>
-            <div class="flex item_add">
-              <div class="item_price">{{item.price/100}}</div>
-              <div class="add_car" @click="add(item)">加入购物车</div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js" type="text/javascript" charset="utf-8">
     </script>
@@ -64,13 +31,13 @@
       new Vue({
         el: '#app',
         data: {
-          message: 'Hello Vue.js!',
           scroll: 0,
           rightDivHeight: 0,
           isPhone: false,
           windowWidth: document.documentElement.clientWidth, //实时屏幕宽度
           reday: false,
           activeIndex: 0,
+          d:0,
           list: [{
             id: 1,
             name: '1'
@@ -103,16 +70,20 @@
           },
           //判断pc端 or 移动端
           checkV() {
+            this.show = false
             setTimeout((res) => {
               var sUserAgent = navigator.userAgent.toLowerCase();
               if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
                 this.isPhone = true
               } else {
                 this.isPhone = false
-                this.rightDivHeight = this.$refs.right.offsetHeight
-                document.getElementById('main').style.height = this.rightDivHeight + 'px'
-                document.getElementById('main').style.top = '-' + (this.rightDivHeight - window.innerHeight) +
-                  'px'
+                this.$nextTick((res)=>{
+                  this.rightDivHeight = this.$refs.right?this.$refs.right.offsetHeight:0
+                  document.getElementById('main').style.height = this.rightDivHeight + 'px'
+                  document.getElementById('main').style.top = '-' + (this.rightDivHeight - window.innerHeight) +
+                    'px'
+                })
+                
               }
             }, 20)
 
